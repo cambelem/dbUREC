@@ -2,7 +2,7 @@
 /**
  * @author Eric Cambel
  */
-$proper_name  = 'User Control';
+$proper_name  = 'dbUREC';
 $version      = '1.0.0';
 $register     = false;
 $unregister   = false;

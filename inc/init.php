@@ -2,6 +2,6 @@
 /**
  * @author Matthew McNaney <mcnaney at gmail dot com>
  */
-PHPWS_Core::requireInc('hangman', 'defines.php');
+PHPWS_Core::requireInc('dbUREC', 'defines.php');
 
 ?>

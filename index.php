@@ -1,5 +1,5 @@
 <?php
-	namespace usercontrol;
+	namespace dbUREC;
 
 
 /**
@@ -12,7 +12,11 @@
 	    exit();
 	}
 
-    $uc = new \usercontrol\UserControl();
+    if (!\Current_User::isDeity())
+    {
+        \PHPWS_Core::reroute('index.php');
+    }
+    $uc = new \dbUREC\UniversityRec();
     $uc->handleRequest();
     $content = $uc->getContent();
 
@@ -22,12 +26,12 @@
 	if (isset($content)) {
 	    if ($content === false) {
 	        \NQ::close();
-	        \PHPWS_Core::reroute('index.php?module=usercontrol');
+	        \PHPWS_Core::reroute('index.php?module=dbUREC');
 	    }
 	}
 	// Add top menu bar to theme
-	//\PHPWS_Core::initModClass('intern', 'UI/TopUI.php');
-	//UI\TopUI::plug();
+	\PHPWS_Core::initModClass('dbUREC', 'UI/TopUI.php');
+	UI\TopUI::plug();
 	
 	// Get Notifications, add to layout
 	//$nv = new UI\NotifyUI();

@@ -1,9 +1,9 @@
 <?php
-namespace usercontrol\UI;
+namespace dbUREC\UI;
 /**
  * Simply for making sure UI's are consistent.
  */
 interface UI
 {
-    public static function display();
+    public function display();
 }

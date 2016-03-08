@@ -1,8 +1,8 @@
 <?php
 
-namespace usercontrol;
+namespace dbUREC;
 
-class UserControl {
+class UniversityRec {
 
     private $content;
 
@@ -27,6 +27,7 @@ class UserControl {
 
         // Show requested page.
         switch ($req) {
+            /*
             case 'AddUser':
                 $ctrl = new Command\AddUser();
                 $ctrl->execute();
@@ -39,6 +40,7 @@ class UserControl {
                 $ctrl = new Command\UpdatePermissions();
                 $ctrl->execute();
                 break;
+            */
             default:
                 $menu = new UI\MainUI();
                 $this->content = $menu->display();

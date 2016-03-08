@@ -1,13 +1,13 @@
 <?php
-namespace usercontrol\UI;
+namespace dbUREC\UI;
 
 class MainUI implements UI
 {
-    public static function display()
+    public function display()
     {       
         $tpl = array();       
-        javascriptMod('usercontrol', 'viewMain');
+        javascriptMod('dbUREC', 'viewMain');
         
-        return \PHPWS_Template::process($tpl, 'usercontrol', 'main.tpl');
+        return \PHPWS_Template::process($tpl, 'dbUREC', 'main.tpl');
     }
 }
