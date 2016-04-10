@@ -12,10 +12,11 @@
 	    exit();
 	}
 
-    if (!\Current_User::isDeity())
+    if (!\Current_User::allow('dbUREC', 'use_urec'))
     {
-        \PHPWS_Core::reroute('index.php');
+		\PHPWS_Core::reroute('index.php?module=users&action=user&command=logout');
     }
+ 
     $uc = new \dbUREC\UniversityRec();
     $uc->handleRequest();
     $content = $uc->getContent();

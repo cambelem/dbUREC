@@ -14,7 +14,7 @@ class TopUI implements UI
 
     public static function plug()
     {
-	$tpl = array();
+    	$tpl = array();
         $tpl['HOME_LINK']    = \PHPWS_Text::moduleLink('Menu', 'dbUREC');
         $tpl['ADD_LINK']     = \PHPWS_Text::moduleLink('Add New User', 'dbUREC', array('action' => 'newUser'));
         $tpl['SEARCH_LINK']  = \PHPWS_Text::moduleLink('Search', 'dbUREC', array('action' => 'search'));
@@ -45,8 +45,11 @@ class TopUI implements UI
             $tpl = array_merge($tpl, $adminOptions);
         }
 
-        \Layout::plug(\PHPWS_Template::process($tpl, 'dbUREC', 'top.tpl'), 'NAV_LINKS');
-    }
+       \Layout::plug(\PHPWS_Template::process($tpl, 'dbUREC', 'top.tpl'), 'NAV_LINKS');
+
+   }
+
+
 }
 
 ?>

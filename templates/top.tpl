@@ -1,6 +1,6 @@
   <!-- Brand and toggle get grouped for better mobile display -->
   <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#dburecNavbar" >
       <span class="sr-only">Toggle navigation</span>
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
@@ -9,10 +9,10 @@
     <a class="navbar-brand" href="index.php?module=dbUREC">Univerisity Recreation</a>
   </div>
 <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse">
+  <div class="collapse navbar-collapse" id="dburecNavbar">
     <ul class="nav navbar-nav">
-      <li><a href="index.php?module=dbUREC"><i class="fa fa-plus"></i> Add New User</a></li>
-      <li><a href="index.php?module=dbUREC"><i class="fa fa-search"></i> Search</a></li>
+      <li><a href="index.php?module=dbUREC&action=newUser"><i class="fa fa-plus"></i> Add New User</a></li>
+      <li><a href="index.php?module=dbUREC&action=search"><i class="fa fa-search"></i> Search</a></li>
     </ul>
 
 
@@ -42,4 +42,6 @@
     </ul>
 
   </div><!-- /.navbar-collapse -->
+
+
 

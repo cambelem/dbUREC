@@ -27,15 +27,28 @@ class UniversityRec {
 
         // Show requested page.
         switch ($req) {
-            /*
-            case 'AddUser':
-                $ctrl = new Command\AddUser();
+            
+            case 'newUser':
+                //$ctrl = new Command\AddUser();
+                //$ctrl->execute();
+                $addUser = new UI\AddUserUI();
+                $this->content = $addUser->display();
+                break;          
+            case 'search':
+                $searchUser = new UI\SearchUserUI();
+                $this->content = $searchUser->display();
+                break;
+	    case 'showClimber':
+		$showClimber = new UI\ShowClimberUI();
+		$this->content = $showClimber->display();
+		break;
+            case 'showClimberRest':
+            //var_dump("made it");
+            //exit;
+                $ctrl = new Command\ShowClimberRest();
                 $ctrl->execute();
                 break;
-            case 'DeleteUser':
-                $ctrl = new Command\DeleteUser();
-                $this->execute();
-                break;
+            /*
             case 'UpdatePermissions':
                 $ctrl = new Command\UpdatePermissions();
                 $ctrl->execute();

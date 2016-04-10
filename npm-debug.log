@@ -1,0 +1,67 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', 'classNames' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.40
+4 verbose cache add [ 'classNames', null ]
+5 verbose cache add name=undefined spec="classNames" args=["classNames",null]
+6 verbose parsed url { protocol: null,
+6 verbose parsed url   slashes: null,
+6 verbose parsed url   auth: null,
+6 verbose parsed url   host: null,
+6 verbose parsed url   port: null,
+6 verbose parsed url   hostname: null,
+6 verbose parsed url   hash: null,
+6 verbose parsed url   search: null,
+6 verbose parsed url   query: null,
+6 verbose parsed url   pathname: 'classNames',
+6 verbose parsed url   path: 'classNames',
+6 verbose parsed url   href: 'classNames' }
+7 silly lockFile 959178bb-classNames classNames
+8 verbose lock classNames /root/.npm/959178bb-classNames.lock
+9 silly lockFile 959178bb-classNames classNames
+10 silly lockFile 959178bb-classNames classNames
+11 verbose addNamed [ 'classNames', '' ]
+12 verbose addNamed [ null, '*' ]
+13 silly lockFile 2cb1a4a2-classNames classNames@
+14 verbose lock classNames@ /root/.npm/2cb1a4a2-classNames.lock
+15 silly addNameRange { name: 'classNames', range: '*', hasData: false }
+16 verbose request where is /classNames
+17 verbose request registry https://registry.npmjs.org/
+18 verbose request id c35c9431c40375d3
+19 verbose url raw /classNames
+20 verbose url resolving [ 'https://registry.npmjs.org/', './classNames' ]
+21 verbose url resolved https://registry.npmjs.org/classNames
+22 verbose request where is https://registry.npmjs.org/classNames
+23 info trying registry request attempt 1 at 13:46:07
+24 http GET https://registry.npmjs.org/classNames
+25 http 404 https://registry.npmjs.org/classNames
+26 silly registry.get cb [ 404,
+26 silly registry.get   { 'content-type': 'application/json',
+26 silly registry.get     'cache-control': 'max-age=0',
+26 silly registry.get     'content-length': '2',
+26 silly registry.get     'accept-ranges': 'bytes',
+26 silly registry.get     date: 'Tue, 05 Apr 2016 17:46:07 GMT',
+26 silly registry.get     via: '1.1 varnish',
+26 silly registry.get     age: '0',
+26 silly registry.get     connection: 'keep-alive',
+26 silly registry.get     'x-served-by': 'cache-iad2146-IAD',
+26 silly registry.get     'x-cache': 'MISS',
+26 silly registry.get     'x-cache-hits': '0',
+26 silly registry.get     'x-timer': 'S1459878367.423525,VS0,VE26',
+26 silly registry.get     vary: 'Accept-Encoding' } ]
+27 silly lockFile 2cb1a4a2-classNames classNames@
+28 silly lockFile 2cb1a4a2-classNames classNames@
+29 error 404 Not Found
+29 error 404
+29 error 404 'classNames' is not in the npm registry.
+29 error 404 You should bug the author to publish it
+29 error 404
+29 error 404 Note that you can also install from a
+29 error 404 tarball, folder, or http url, or git url.
+30 error System Linux 2.6.32-573.8.1.el6.x86_64
+31 error command "/usr/bin/node" "/usr/bin/npm" "install" "classNames"
+32 error cwd /usr/local/apache2/htdocs/u/classes/3430/161/team4/mod/dbUREC
+33 error node -v v0.10.40
+34 error npm -v 1.4.28
+35 error code E404
+36 verbose exit [ 1, true ]
