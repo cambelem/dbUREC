@@ -23,60 +23,70 @@ var ShowClimber = React.createClass({
             }.bind(this)                
         });
     },
-    deleteUse: function() {
-        /*
+    handleDelete: function(bid) {
+
         $.ajax({
-            url: 'index.php?module=usercontrol&action=DeleteUser,
-            type: 'GET',
+            url: 'index.php?module=dbUREC&action=showClimberRest&student='+bid,
+            type: 'DELETE',
             dataType: 'json',
-            success: function(data) {   
-                this.setState({clientData: data});           
+            success: function() {   
+                // Redirect to search screen         
             }.bind(this),
             error: function(xhr, status, err) {
-                alert("Failed to grab client data."+err.toString());
-                console.error(this.props.url, status, err.toString());
+                alert("Sorry, looks like something went wrong. We couldn't delete the record.");
             }.bind(this)                
         });
-*/
+
     },
-    updatePermissions: function() {
-        /*
+    handleSave: function(climberData) {
+
         $.ajax({
-            url: 'index.php?module=usercontrol&action=UpdatePermissions,
-            type: 'GET',
+            url: 'index.php?module=dbUREC&action=showClimberRest',
+            type: 'PUT',
+            processData: false,
             dataType: 'json',
-            success: function(data) {   
-                this.setState({clientData: data});           
+            data: JSON.stringify(climberData),
+            success: function() {            
             }.bind(this),
             error: function(xhr, status, err) {
-                alert("Failed to grab client data."+err.toString());
-                console.error(this.props.url, status, err.toString());
+                alert("Sorry, looks like something went wrong. We couldn't save your changes.");
             }.bind(this)                
         });
-*/
+
     },
     render: function() {  
         if (this.state.student == null)
-	{
-	   var studentInfo = null;
-	}
-	else
-	{
-	   var studentInfo = <StudentInfo student={this.state.student} />
-	}
+		{
+		   	var studentInfo = null;
+		}
+		else
+		{
+			var handleSave = this.handleSave;
+			var handleDelete = this.handleDelete;
+
+		   	var studentInfo = this.state.student.map(function(data){
+		   	return(
+		   			<StudentInfo key = {data.bannerid}
+		   						 bid = {data.bannerid}
+		   						 bday = {data.bday}
+		   						 fname = {data.fname}
+		   						 mname = {data.mname}
+		   						 lname = {data.lname}
+		   						 phone = {data.phoneNumber}
+		   						 address = {data.address} 
+		   						 handleDelete = {handleDelete} 
+		   						 handleSave = {handleSave}/>
+		   		);
+		   	}) ;
+		}
 	return (
             <div className="row" style={{marginBottom:"2em"}}>
                 <div className="col-md-12">
-                    <h2><i className="fa fa-search" />Search Climber</h2>
+                    <h2><i className="fa fa-search" />Climber Information</h2>
                     <br />
-                    <form role="form" id="searchClimberForm" className="form-horizontal" action="index.php" method="get" onSubmit={this.handleSubmit}>
-                        <input type="hidden" name="module" value="dbUREC"/>
-                        <input type="hidden" name="action" value="searchClimber"/>
-
-                        {studentInfo}                     
-                        <ButtonGroup />
-                    </form>                    
-                    
+                    <div className="form-horizontal">
+                        {studentInfo} 
+                    </div>                                                      
                 </div>
             </div>
         );
@@ -84,8 +94,22 @@ var ShowClimber = React.createClass({
 });
 
 var StudentInfo = React.createClass({
+	handleSave: function() {
+		
+        this.props.handleSave({bannerid: this.props.bid,
+                            address: React.findDOMNode(this.refs.climberEditAddress).value,
+                            fname: React.findDOMNode(this.refs.climberEditFname).value,
+                            lname: React.findDOMNode(this.refs.climberEditLname).value,
+                            mname: React.findDOMNode(this.refs.climberEditMname).value,
+                            bday: this.props.bday,
+                            phoneNumber: React.findDOMNode(this.refs.climberEditPhone).value,
+                            
+                        });
+    },
+    handleDelete: function() {
+        this.props.handleDelete(this.props.bid);
+    },
     render: function() {
-console.log(this.props.student.fname);
         return (
             <div>
                     <fieldset>
@@ -95,17 +119,17 @@ console.log(this.props.student.fname);
                         <div className="form-group">
                             <div className="col-md-5">
                                 <label htmlFor="">Last Name</label>
-                                <input type="text" className="form-control">{this.props.student.lname}</input>
+                                <input type="text" className="form-control" id="climber-edit-Lname" ref="climberEditLname" defaultValue={this.props.lname} />
                             </div>
                        
                             <div className="col-md-2">
                                 <label htmlFor="">Middle Initial</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" ref="climberEditMname" defaultValue={this.props.mname}/>
                             </div>
                              
                             <div className="col-md-5 pull-right">
                                 <label htmlFor="">First Name</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" ref="climberEditFname" defaultValue={this.props.fname}/>
                             </div>
                         </div>        
                         
@@ -113,29 +137,29 @@ console.log(this.props.student.fname);
                         <div className="form-group">
                             <div className="col-md-4">
                                 <label htmlFor="">Local Phone</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" ref="climberEditPhone" defaultValue={this.props.phone}/>
                             </div>
                              
                             <div className="col-md-4">
                                 <label htmlFor="">Cell Phone</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" defaultValue="no value"/>
                             </div>
 
                             <div className="col-md-4">
                                 <label htmlFor="">Address</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" ref="climberEditAddress" defaultValue={this.props.address}/>
                             </div>
                         </div>        
 
                         <div className="form-group">
                             <div className="col-md-8">
                                 <label htmlFor="">Primary Email</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" defaultValue="no value"/>
                             </div>
 
                             <div className="col-md-4 pull-right">
                                 <label htmlFor="">Banner ID</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" defaultValue={this.props.bid} readOnly/>
                             </div>
                         </div>        
                        
@@ -149,10 +173,13 @@ console.log(this.props.student.fname);
 
                             <div className="col-md-4">
                                 <label htmlFor="">Date of Last Skills Assessment</label>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" defaultValue="no value"/>
                             </div> 
                         </div>               
                     </fieldset>
+
+                    <ButtonGroup handleSave={this.handleSave} 
+                    			 handleDelete={this.handleDelete}/>  
             </div> 
         );
     }
@@ -163,8 +190,8 @@ var ButtonGroup = React.createClass({
         return(
             <fieldset>
                 <div className="form-group">
-                    <Delete />
-                    <Submit /> 
+                    <Delete handleDelete={this.props.handleDelete}/>
+                    <Submit handleSave={this.props.handleSave} /> 
                 </div>
             </fieldset>      
         );
@@ -172,13 +199,18 @@ var ButtonGroup = React.createClass({
 });
 
 var Submit = React.createClass({
+	handleClick: function() {
+		this.props.handleSave();
+		console.log("made it")
+	},
     render: function() {       
         var button = null;
-        if(this.props.submitted){
-            button = <button type="submit" className="btn btn-primary pull-right" id="search-btn" disabled><i className="fa fa-spinner fa-spin" /> Searching...</button>;
-        }else{
-            button = <button type="submit" className="btn btn-primary pull-right" id="search-btn" onClick={this.handleClick}>Search Climber</button>;
-        } 
+
+        //if(this.props.submitted){
+         //   button = <button type="submit" className="btn btn-primary pull-right" id="search-btn" disabled><i className="fa fa-spinner fa-spin" /> Searching...</button>;
+        //}else{
+            button = <button type="submit" className="btn btn-primary pull-right" id="search-btn" onClick={this.handleClick}>Save Climber</button>;
+        //} 
         
         return (
             <div className="col-lg-2">
@@ -189,10 +221,13 @@ var Submit = React.createClass({
 });
 
 var Delete = React.createClass({
+	handleCLick: function() {
+		this.props.handleDelete();
+	},
     render: function() {
         return(
             <div className="col-lg-1 col-lg-offset-9">
-                <a href="" className="btn btn-danger-hover" onclick="return confirm('Are you sure you want to delete this climber?');">Delete</a>
+                <button type="submit" className="btn btn-danger-hover" onclick={this.handleClick}>Delete</button>
             </div>             
         );
     }
