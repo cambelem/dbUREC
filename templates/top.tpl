@@ -11,27 +11,31 @@
 <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="dburecNavbar">
     <ul class="nav navbar-nav">
-      <li><a href="index.php?module=dbUREC&action=newUser"><i class="fa fa-plus"></i> Add New User</a></li>
+      <li><a href="index.php?module=dbUREC&action=checkIn"><i class="fa fa-plus"></i> Check In Status</a></li>
       <li><a href="index.php?module=dbUREC&action=search"><i class="fa fa-search"></i> Search</a></li>
+      <li><a href="index.php?module=dbUREC&action=rentalSearch"><i class="fa fa-edit"></i> Rental Service</a></li>
     </ul>
 
 
     <ul class="nav navbar-nav navbar-right">
-      <!-- BEGIN admin_links -->
+      
       {ADMIN_OPTIONS}
       <li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings &nbsp;<b class="caret"></b></a>
         <ul class="dropdown-menu">
-          <!-- BEGIN majors -->
-          <li>{EDIT_MAJORS_LINK}</li>
-          <!-- END majors -->
+       
+    <li>{EDIT_FACULTY_LINK}</li>   
+	  <li>{EDIT_EQUIPMENT_LINK}</li>
+	  <li>{EDIT_PROGRAM_LINK}</li>
+	  <li>{EDIT_FACILITY_LINK}</li>
+	  <li>{EDIT_CERT_LINK}</li>
 
           <!-- BEGIN ctrl_panel -->
           <li>{CONTROL_PANEL}</li>
           <!-- END ctrl_panel -->
         </ul>
       </li>
-      <!-- END admin_links -->
+      
       <li>
         <a href="#">{USER_FULL_NAME}</a>
       </li>

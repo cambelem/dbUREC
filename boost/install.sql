@@ -3,43 +3,40 @@ BEGIN;
 set foreign_key_checks=0;
 
 create table dbUREC_student (
-	bannerid int(9) NOT NULL,
-	
+
+	bannerid int(9) NOT NULL,	
+	cid int,
     fname varchar(20) NOT NULL,
 	mname varchar(20),
 	lname varchar(20) NOT NULL,
-	
 	bday date NOT NULL,
-	
 	address char(35) NOT NULL,
-	
 	phoneNumber char(10) NOT NULL, 
+	email char(30) NOT NULL,
 	
-	CONSTRAINT PRIMARY KEY (bannerid)
-	
+	CONSTRAINT PRIMARY KEY (bannerid),
+	CONSTRAINT FOREIGN KEY (cid) REFERENCES dbUREC_certification(id)
 );
 
 
 CREATE TABLE dbUREC_employee (
+
 	bannerid int(9) NOT NULL,
 	fid int(9) NOT NULL,
-	eid int(9),
-	
+	superssn int(9),
+	cid int,
 	fname varchar(20) NOT NULL,
 	mname varchar(20),
 	lname varchar(20) NOT NULL,
-	
 	isStudent int(1) NOT NULL,
-	
 	gender char(1) NOT NULL,
-	
 	address char(35) NOT NULL,
-	
 	email char(30) NOT NULL,
 	
 	CONSTRAINT PRIMARY KEY (bannerid),
 	CONSTRAINT FOREIGN KEY (fid) REFERENCES dbUREC_facility(id),
-	CONSTRAINT FOREIGN KEY (eid) REFERENCES dbUREC_employee(bannerid)
+	CONSTRAINT FOREIGN KEY (superssn) REFERENCES dbUREC_employee(bannerid),
+	CONSTRAINT FOREIGN KEY (cid) REFERENCES dbUREC_certification(id)
 );
 
 CREATE TABLE dbUREC_employee_phoneNumbers (
@@ -55,8 +52,8 @@ CREATE TABLE dbUREC_employee_phoneNumbers (
 CREATE TABLE dbUREC_equipment (
 	
 	id int NOT NULL,
-	renterid int(9) NOT NULL,
-	employeeid int(9) NOT NULL,
+	renterid int(9),
+	employeeid int(9),
 	
 	name varchar(20) NOT NULL, 
 	
@@ -69,16 +66,11 @@ CREATE TABLE dbUREC_equipment (
 
 CREATE TABLE dbUREC_certification (
 
+	id int NOT NULL,
 	name varchar(20) NOT NULL,
 	c_type varchar(20) NOT NULL,
-	id int NOT NULL,
-	studentid int(9) NOT NULL,
-	employeeid int(9) NOT NULL,
 	
-	CONSTRAINT PRIMARY KEY (id),
-	CONSTRAINT FOREIGN KEY (studentid) REFERENCES dbUREC_student(bannerid),
-	CONSTRAINT FOREIGN KEY (employeeid) REFERENCES dbUREC_employee(bannerid)
-
+	CONSTRAINT PRIMARY KEY (id)
 );
 
 
@@ -90,14 +82,14 @@ create table dbUREC_facility (
 	id int NOT NULL,
 	
 	CONSTRAINT PRIMARY KEY (id)
-	
 );
 
 CREATE TABLE dbUREC_program (
 
+	id int NOT NULL,
 	name varchar(20) NOT NULL,
 	p_type varchar(20) NOT NULL,
-	id int NOT NULL,
+	start_date date NOT NULL,
 	teacherid int(9) NOT NULL,
 	f_id int NOT NULL,
 	
@@ -107,25 +99,38 @@ CREATE TABLE dbUREC_program (
 
 );
 
+CREATE TABLE dbUREC_time (
+
+	id int NOT NULL,
+	time_in date NOT NULL,
+	time_out date NOT NULL,
+	studentid int,
+	employeeid int,
+	
+	CONSTRAINT PRIMARY KEY (id),
+	CONSTRAINT FOREIGN KEY (studentid) REFERENCES dbUREC_employee(bannerid),
+	CONSTRAINT FOREIGN KEY (employeeid) REFERENCES dbUREC_student(bannerid)
+);
+
 CREATE TABLE dbUREC_studProg (
 
-	sid int(9) NOT NULL,
-	pid int NOT NULL,
+	studentid int(9) NOT NULL,
+	programid int NOT NULL,
 	
-	CONSTRAINT PRIMARY KEY (sid, pid),
-	CONSTRAINT FOREIGN KEY (sid) REFERENCES dbUREC_student(bannerid),
-	CONSTRAINT FOREIGN KEY (pid) REFERENCES dbUREC_program(id)
+	CONSTRAINT PRIMARY KEY (studentid, programid),
+	CONSTRAINT FOREIGN KEY (studentid) REFERENCES dbUREC_student(bannerid),
+	CONSTRAINT FOREIGN KEY (programid) REFERENCES dbUREC_program(id)
 
 );
 
 CREATE TABLE dbUREC_empProg (
 
-	eid int(9) NOT NULL,
-	pid int NOT NULL,
+	employeeid int(9) NOT NULL,
+	programid int NOT NULL,
 	
-	CONSTRAINT PRIMARY KEY (eid, pid),
-	CONSTRAINT FOREIGN KEY (eid) REFERENCES dbUREC_employee(bannerid),
-	CONSTRAINT FOREIGN KEY (pid) REFERENCES dbUREC_program(id)
+	CONSTRAINT PRIMARY KEY (employeeid, programid),
+	CONSTRAINT FOREIGN KEY (employeeid) REFERENCES dbUREC_employee(bannerid),
+	CONSTRAINT FOREIGN KEY (programid) REFERENCES dbUREC_program(id)
 
 );
 

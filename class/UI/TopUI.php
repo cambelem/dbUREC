@@ -16,8 +16,9 @@ class TopUI implements UI
     {
     	$tpl = array();
         $tpl['HOME_LINK']    = \PHPWS_Text::moduleLink('Menu', 'dbUREC');
-        $tpl['ADD_LINK']     = \PHPWS_Text::moduleLink('Add New User', 'dbUREC', array('action' => 'newUser'));
+        $tpl['ADD_LINK']     = \PHPWS_Text::moduleLink('Check In', 'dbUREC', array('action' => 'checkIn'));
         $tpl['SEARCH_LINK']  = \PHPWS_Text::moduleLink('Search', 'dbUREC', array('action' => 'search'));
+	    $tpl['FACULTY_LINK'] = \PHPWS_Text::moduleLink('Faculty Edit', 'dbUREC', array('action' => 'edit_faculty'));
         $auth = \Current_User::getAuthorization();
 
         $tpl['USER_FULL_NAME'] = \Current_User::getDisplayName();
@@ -27,11 +28,16 @@ class TopUI implements UI
         $adminOptions = array();
 
         // Edit list of majors
-        if(\Current_User::allow('intern', 'edit_major')){
-            $adminOptions['EDIT_MAJORS_LINK'] = \PHPWS_Text::secureLink('Edit Undergraduate Majors','intern',array('action' => 'showEditMajors'));
-        }
+        //if(\Current_User::allow('intern', 'edit_major')){
+        $adminOptions['EDIT_MAJORS_LINK'] = \PHPWS_Text::secureLink('Edit Undergraduate Majors','intern',array('action' => 'showEditMajors'));
+        //}
 
-        
+        $tpl['EDIT_FACULTY_LINK'] =   \PHPWS_Text::moduleLink('Edit Faculty','dbUREC', array('action' => 'edit_faculty'));
+    	$tpl['EDIT_EQUIPMENT_LINK'] =	\PHPWS_Text::moduleLink('Edit Equipment','dbUREC', array('action' => 'showEditEquipment'));
+    	$tpl['EDIT_PROGRAM_LINK'] = 	\PHPWS_Text::moduleLink('Edit Programs', 'dbUREC', array('action' => 'showEditProgram'));
+    	$tpl['EDIT_FACILITY_LINK'] = 	\PHPWS_Text::moduleLink('Edit Facilities', 'dbUREC', array('action' => 'showEditFacility'));
+    	$tpl['EDIT_CERT_LINK'] = 	\PHPWS_Text::moduleLink('Edit Certifications', 'dbUREC', array('action' => 'showEditCert'));
+            
 
         if(\Current_User::isDeity()){
             $adminOptions['CONTROL_PANEL']         = \PHPWS_Text::secureLink('Control Panel','controlpanel');
