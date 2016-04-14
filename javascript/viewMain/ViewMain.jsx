@@ -1,71 +1,37 @@
 
 var ViewMain = React.createClass({
-    addUser: function() {
-        /* 
-        $.ajax({
-            url: 'index.php?module=usercontrol&action=AddUser,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {   
-                this.setState({clientData: data});           
-            }.bind(this),
-            error: function(xhr, status, err) {
-                alert("Failed to grab client data."+err.toString());
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)                
-        });
-*/
-    },
-    deleteUse: function() {
-        /*
-        $.ajax({
-            url: 'index.php?module=usercontrol&action=DeleteUser,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {   
-                this.setState({clientData: data});           
-            }.bind(this),
-            error: function(xhr, status, err) {
-                alert("Failed to grab client data."+err.toString());
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)                
-        });
-*/
-    },
-    updatePermissions: function() {
-        /*
-        $.ajax({
-            url: 'index.php?module=usercontrol&action=UpdatePermissions,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {   
-                this.setState({clientData: data});           
-            }.bind(this),
-            error: function(xhr, status, err) {
-                alert("Failed to grab client data."+err.toString());
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)                
-        });
-*/
-    },
     render: function() {  
         return (
             <div className="row">
                 <div className="col-md-12">
-                    <h1>Test:</h1>
-                    <Test />
+                    <Menu />
                 </div>
             </div>
         );
     }
 });
 
-var Test = React.createClass({
+var Menu = React.createClass({
     render: function() {
         return (
-            <div>
-                Hello World!
-            </div>
+     	   <div className="row">
+		  <div className="col-lg-4">
+    			<h2>Rockwall Check In</h2>
+    			<p>Climber check in and check out for the rockwall.</p>
+    			<p><a className="btn btn-primary btn-large" href="index.php?module=dbUREC&action=checkIn"><i className="fa fa-plus"></i> Check In / Check Out</a></p>
+  		</div>
+  		<div className="col-lg-4">
+    			<h2>Search</h2>
+    			<p>Find existing climbers or Add a climber if the student is new.</p>
+    			<p><a className="btn btn-primary btn-large" href="index.php?module=dbUREC&action=search"><i className="fa fa-search"></i> Search Climber</a></p>
+  		</div>
+  		<div className="col-lg-4">
+    			<h2>Rental Service</h2>
+    			<p>Show and retrieve rental gear for climbers.</p>
+    			<p><a className="btn btn-primary btn-large" href="index.php?module=dbUREC&action=rentalService"><i className="fa fa-edit"></i> Add &amp; Update Faculty</a></p>
+
+  		</div>
+	</div> 
         );
     }
 });

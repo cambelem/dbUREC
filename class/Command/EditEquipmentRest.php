@@ -2,7 +2,7 @@
 
 namespace dbUREC\Command;
 
-class ShowClimberRest {
+class EditEquipmentRest {
 
     public function execute()
     {
@@ -28,24 +28,16 @@ class ShowClimberRest {
 
     public function get()
     {
-        $banner = $_REQUEST['student'];
-
         $db = \Database::newDB();
         $pdo = $db->getPDO();
 
         $sql = "SELECT * 
-                FROM dbUREC_student
-                WHERE bannerid = :banner";
+                FROM dbUREC_equipment";
 
         $sth = $pdo->prepare($sql);
 
-        $sth->execute(array('banner'=>$banner));
+        $sth->execute();
         $result = $sth->fetchAll(\PDO::FETCH_ASSOC);
-
-
-        if(sizeof($result) == 0){
-            return;
-        }
 
         return $result;
     }
@@ -56,39 +48,51 @@ class ShowClimberRest {
         $req = \Server::getCurrentRequest();
         $postarray = json_decode($req->getRawData(), true);
 
-
-
         $db = \Database::newDB();
         $pdo = $db->getPDO();
 
-        $sql = "UPDATE dbUREC_student
-                SET fname=:fname, mname=:mname, lname=:lname, bday=:bday, address=:address, phoneNumber=:phoneNumber
-                WHERE bannerid = :banner";
+        $sql = "UPDATE dbUREC_equipment
+                SET name=:name, e_type=:e_type
+                WHERE id = :id";
 
         $sth = $pdo->prepare($sql);
 
-        $sth->execute(array('banner'=>$postarray['bannerid'], 'fname'=>$postarray['fname'], 
-                            'mname'=>$postarray['mname'],     'lname'=>$postarray['lname'], 
-                            'bday'=>$postarray['bday'],       'address'=>$postarray['address'], 
-                            'phoneNumber'=>$postarray['phoneNumber']));
+        $sth->execute(array('name'=>$postarray['equipmentName'], 'e_type'=>$postarray['equipmentType'], 
+                            'id'=>$postarray['equipmentID']));
 
-        echo json_encode(1);
     }
 
     public function delete()
     {
         
-        $banner = $_REQUEST['student'];
+        $eid = $_REQUEST['eid'];
 
         $db = \Database::newDB();
         $pdo = $db->getPDO();
 
-        $sql = "DELETE FROM dbUREC_student
-                WHERE bannerid = :banner";
+        $sql = "DELETE FROM dbUREC_equipment
+                WHERE id = :eid";
 
         $sth = $pdo->prepare($sql);
 
-        $sth->execute(array('banner'=>$banner));
-        
+        $sth->execute(array('eid'=>$eid));
+    }
+
+    public function post()
+    {
+        $req = \Server::getCurrentRequest();
+        $postarray = json_decode($req->getRawData(), true);
+
+        $db = \Database::newDB();
+        $pdo = $db->getPDO();
+
+        $sql = "INSERT INTO dbUREC_equipment
+                VALUES(:id, null, null, :name, :e_type)";
+
+        $sth = $pdo->prepare($sql);
+
+        $sth->execute(array('name'=>$postarray['equipmentName'], 'e_type'=>$postarray['equipmentType'], 
+                            'id'=>$postarray['equipmentID']));
+  
     }
 }

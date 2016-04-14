@@ -14,12 +14,14 @@ var ShowClimber = React.createClass({
             type: 'GET',
             dataType: 'json',
             success: function(data) {   
+                if(data == null){
+                    window.location = 'index.php?module=dbUREC&action=newUser&student=' + banner_id;
+                }
                 this.setState({student: data});
             	console.log(data);
 	    }.bind(this),
             error: function(xhr, status, err) {
-                alert("Failed to grab client data."+err.toString());
-                console.error(this.props.url, status, err.toString());
+                alert("Couldn't grab climber data");
             }.bind(this)                
         });
     },
@@ -28,9 +30,9 @@ var ShowClimber = React.createClass({
         $.ajax({
             url: 'index.php?module=dbUREC&action=showClimberRest&student='+bid,
             type: 'DELETE',
-            dataType: 'json',
             success: function() {   
-                // Redirect to search screen         
+                // Redirect to search screen
+                window.location = 'index.php';         
             }.bind(this),
             error: function(xhr, status, err) {
                 alert("Sorry, looks like something went wrong. We couldn't delete the record.");
@@ -58,6 +60,9 @@ var ShowClimber = React.createClass({
         if (this.state.student == null)
 		{
 		   	var studentInfo = null;
+            var interface = <p className="text-muted" style={{position:"absolute", top:"50%", left:"50%"}}>
+                                <i className="fa fa-spinner fa-2x fa-spin"></i> Loading Climber...
+                            </p>;
 		}
 		else
 		{
@@ -78,16 +83,20 @@ var ShowClimber = React.createClass({
 		   						 handleSave = {handleSave}/>
 		   		);
 		   	}) ;
+
+            var interface = <div className="row" style={{marginBottom:"2em"}}>
+                                <div className="col-md-12">
+                                    <h2><i className="fa fa-search" />Climber Information</h2>
+                                    <br />
+                                    <div className="form-horizontal">
+                                        {studentInfo} 
+                                    </div>                                                      
+                                </div>
+                            </div>
 		}
 	return (
-            <div className="row" style={{marginBottom:"2em"}}>
-                <div className="col-md-12">
-                    <h2><i className="fa fa-search" />Climber Information</h2>
-                    <br />
-                    <div className="form-horizontal">
-                        {studentInfo} 
-                    </div>                                                      
-                </div>
+            <div>
+                {interface}
             </div>
         );
     }
@@ -221,13 +230,14 @@ var Submit = React.createClass({
 });
 
 var Delete = React.createClass({
-	handleCLick: function() {
+	handleClick: function() {
+		console.log("MADE IT");
 		this.props.handleDelete();
 	},
     render: function() {
         return(
             <div className="col-lg-1 col-lg-offset-9">
-                <button type="submit" className="btn btn-danger-hover" onclick={this.handleClick}>Delete</button>
+                <button type="submit" className="btn btn-danger-hover" onClick={this.handleClick}>Delete</button>
             </div>             
         );
     }
