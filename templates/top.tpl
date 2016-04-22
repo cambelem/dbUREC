@@ -11,9 +11,9 @@
 <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" id="dburecNavbar">
     <ul class="nav navbar-nav">
-      <li><a href="index.php?module=dbUREC&action=checkIn"><i class="fa fa-plus"></i> Check In Status</a></li>
-      <li><a href="index.php?module=dbUREC&action=search"><i class="fa fa-search"></i> Search</a></li>
-      <li><a href="index.php?module=dbUREC&action=rentalSearch"><i class="fa fa-edit"></i> Rental Service</a></li>
+      <li>{ADD_LINK}</li>
+      <li>{EDIT_CLIMBER_LINK}</li>
+      <li>{RENTAL_LINK}</li>
     </ul>
 
 

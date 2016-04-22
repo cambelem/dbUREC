@@ -16,9 +16,12 @@ class TopUI implements UI
     {
     	$tpl = array();
         $tpl['HOME_LINK']    = \PHPWS_Text::moduleLink('Menu', 'dbUREC');
-        $tpl['ADD_LINK']     = \PHPWS_Text::moduleLink('Check In', 'dbUREC', array('action' => 'checkIn'));
-        $tpl['SEARCH_LINK']  = \PHPWS_Text::moduleLink('Search', 'dbUREC', array('action' => 'search'));
-	    $tpl['FACULTY_LINK'] = \PHPWS_Text::moduleLink('Faculty Edit', 'dbUREC', array('action' => 'edit_faculty'));
+
+        if (isset($_REQUEST['student'])){
+            $tpl['ADD_LINK']     = \PHPWS_Text::moduleLink('<i class="fa fa-plus"></i> Check In', 'dbUREC', array('action' => 'showCheckIn','student'=>$_REQUEST['student']));
+            $tpl['EDIT_CLIMBER_LINK']  = \PHPWS_Text::moduleLink('<i class="fa fa-edit"></i> Edit Climber', 'dbUREC', array('action' => 'showClimber','student'=>$_REQUEST['student']));
+    	    $tpl['RENTAL_LINK'] = \PHPWS_Text::moduleLink('<i class="fa fa-edit"></i> Rental Service', 'dbUREC', array('action' => 'showRentalService','student'=>$_REQUEST['student']));
+        }
         $auth = \Current_User::getAuthorization();
 
         $tpl['USER_FULL_NAME'] = \Current_User::getDisplayName();

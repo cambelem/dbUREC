@@ -4,56 +4,6 @@ var SearchUser = React.createClass({
     getInitialState: function() {
         return {submitted: false, errorMessages: null};
     },
-    /*
-    searchUser: function(bannerId) {
-         
-        $.ajax({
-            url: 'index.php?module=dbUREC&action=studentRest&banner='+bannerId,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) { 
-                console.log(data);  
-                this.setState({action: "showClimber", banner: bannerId});           
-            }.bind(this),
-            error: function(xhr, status, err) {
-                this.setState({action: "newUser", banner: bannerId});
-            }.bind(this)                
-        });
-
-    },
-    */
-    deleteUse: function() {
-        /*
-        $.ajax({
-            url: 'index.php?module=usercontrol&action=DeleteUser,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {   
-                this.setState({clientData: data});           
-            }.bind(this),
-            error: function(xhr, status, err) {
-                alert("Failed to grab client data."+err.toString());
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)                
-        });
-*/
-    },
-    updatePermissions: function() {
-        /*
-        $.ajax({
-            url: 'index.php?module=usercontrol&action=UpdatePermissions,
-            type: 'GET',
-            dataType: 'json',
-            success: function(data) {   
-                this.setState({clientData: data});           
-            }.bind(this),
-            error: function(xhr, status, err) {
-                alert("Failed to grab client data."+err.toString());
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)                
-        });
-*/
-    },
     handleSubmit: function(e) {
         e.preventDefault();
 
@@ -67,7 +17,7 @@ var SearchUser = React.createClass({
                 },1000);
                  
                 return;
-           } 
+	    }
             formElement.submit();
         });
     },
@@ -102,22 +52,26 @@ var SearchUser = React.createClass({
         }
 
         return (
-            <div className="row" style={{marginBottom:"2em"}}>
-                <div className="col-md-12 col-md-offset-4">
-                    <h2><i className="fa fa-search" />Search Climber</h2>
-                    <br />
-                    <form role="form" id="searchClimberForm" className="form-horizontal" action="index.php" method="get" onSubmit={this.handleSubmit}>
-                        <input type="hidden" name="module" value="dbUREC"/>
-                        <input type="hidden" name="action" value="showClimber" />
-                                                
-                        <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTime={500}>
-                            {errors}
-                        </ReactCSSTransitionGroup>
-                        
-                        <StudentInfo ref="studentInfo" />
-                        <SearchButton submitted={this.state.submitted}/>
-                    </form>                 
+            <div>
+                <div className="row">
+                    <div className="col-md-12 col-md-offset-4">
+                        <h2><i className="fa fa-search" />Search Climber</h2>
+                        <br />
+                    </div>
                 </div>
+
+                <form role="form" id="searchClimberForm" className="form-horizontal" action="index.php" method="get" onSubmit={this.handleSubmit}>
+                    <input type="hidden" name="module" value="dbUREC"/>
+                    <input type="hidden" name="action" value="menu" />
+                                            
+                    <ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTime={500}>
+                        {errors}
+                    </ReactCSSTransitionGroup>
+
+                    <StudentInfo ref="studentInfo" />
+
+                    <SearchButton submitted={this.state.submitted}/>
+                </form>                 
             </div>
         );
     }
@@ -130,28 +84,23 @@ var StudentInfo = React.createClass({
     setError: function(status) {
         this.setState({hasError: status});
     },
-    Search: function(e) {
-        var banner = e.target.value;
-        
-
-	
-
-    },
     render: function() {
        var fgClasses = classNames({
             'form-group': true,
             'has-error': this.state.hasError
         }); 
 	return (
-            <div>
+            <div className="row" style={{marginBottom:"2em"}}>  
+                <div className="col-md-12 col-md-offset-4">  
                 <fieldset>
                     <div className={fgClasses} id="student">
                         <div className="col-md-4">
                             <label htmlFor="student">Please enter a Banner ID:</label>
-                            <input type="search" id="studentSearch" className="form-control" name="student"  onKeyDown={this.Search} />
+                            <input type="search" id="studentSearch" className="form-control" name="student" />
                         </div>
                     </div>
                 </fieldset>
+                </div>
             </div> 
         );
     }
@@ -167,7 +116,7 @@ var SearchButton = React.createClass({
         }
         return (
             <div className="row">
-                <div className="col-sm-12 col-md-6 col-md-push-3">
+                <div className="col-sm-12 col-md-6 col-md-push-2">
                     {button}
                 </div>
             </div>
@@ -189,9 +138,9 @@ var ErrorMessagesBlock = React.createClass({
 
         return (
             <div className="row">
-                <div className="col-sm-12 col-md-6 col-md-push-3">
+                <div className="col-md-4 col-md-offset-4">  
                     <div className="alert alert-danger" role="alert">
-                        <p><i className="fa fa-exclamation-circle fa-2x"></i> Please select values for the following fields: </p>
+                        <p><i className="fa fa-exclamation-circle fa-2x"></i> Please enter a valid Banner ID: </p>
                         <ul>
                             {errors}
                         </ul>
