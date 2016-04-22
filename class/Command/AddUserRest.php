@@ -32,7 +32,7 @@ class AddUserRest {
                             'bday'=>$bday, 'address'=>$address, 
                             'phoneNumber'=>$phoneNum));
 				//'email'=>$email
-        return \PHPWS_Core::reroute('index.php?module=dbUREC&action=showClimber&student='.$banner);
+        return \PHPWS_Core::reroute('index.php?module=dbUREC&action=menu&student='.$banner);
 
     }
 

@@ -34,10 +34,12 @@ class UniversityRec {
                 $addUser = new UI\AddUserUI();
                 $this->content = $addUser->display();
                 break;          
-            case 'search':
-                $searchUser = new UI\SearchUserUI();
-                $this->content = $searchUser->display();
-                break;
+            case 'menu':
+                //$searchUser = new UI\SearchUserUI();
+                //$this->content = $searchUser->display();
+                $menu = new UI\MainUI();
+        		$this->content = $menu->display();
+        		break;
 			case 'showClimber':
 				$showClimber = new UI\ShowClimberUI();
 				$this->content = $showClimber->display();
@@ -62,6 +64,14 @@ class UniversityRec {
                 $showEditEquipment = new UI\EditEquipmentUI();
                 $this->content = $showEditEquipment->display();
                 break;
+            case 'showCheckIn':
+                $showCheckIn = new UI\CheckInUI();
+                $this->content = $showCheckIn->display();
+                break;
+            case 'showRentalService':
+                $showRentalService = new UI\RentalServiceUI();
+                $this->content = $showRentalService->display();
+                break;
             case 'showClimberRest':
                 $ctrl = new Command\ShowClimberRest();
                 $ctrl->execute();
@@ -78,10 +88,20 @@ class UniversityRec {
                 $ctrl = new Command\EditEquipmentRest();
                 $ctrl->execute();
                 break;
-            default:
-                $menu = new UI\MainUI();
-                $this->content = $menu->display();
+            case 'checkInRest':
+                $ctrl = new Command\CheckInRest();
+                $ctrl->execute();
                 break;
+            case 'rentalServiceRest':
+                $ctrl = new Command\RentalServiceRest();
+                $ctrl->execute();
+                break;
+            default:
+                //$menu = new UI\MainUI();
+                //$this->content = $menu->display();
+                $searchUser = new UI\SearchUserUI();
+		$this->content = $searchUser->display();
+		break;
         }
     }
 }
