@@ -1,209 +1,160 @@
 var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
-
-var EditFacility = React.createClass({
+//
+var RentalService = React.createClass({
 	getInitialState: function(){
-        return ({submitted: false, errorMessages: null, fData: null});
+        return ({submitted: false, 
+                 errorMessages: null, 
+                 uData: null, 
+                 availGear: null,
+                 showHarness: false,
+                 showShoes: false,
+                 showRope: false});
     },
     componentWillMount: function() {
-    	this.getFacility();
+    	this.getUserGear();
     }, 
-    getFacility: function() {
+    getUserGear: function() {
         $.ajax({
-            url: 'index.php?module=dbUREC&action=editFacilityRest',
+            url: 'index.php?module=dbUREC&action=rentalServiceRest&student='+banner_id,
             type: 'GET',
             dataType: 'json',
-            success: function(data) {   
-                this.setState({fData: data});
+            success: function(data) { 
+                // if (data == null)
+                //     data = 0; 
+                this.setState({uData: data});
             	console.log(data);
 	    }.bind(this),
             error: function(xhr, status, err) {
-                alert("Couldn't grab facility data");
+                alert("Couldn't grab user gear data");
             }.bind(this)                
         });
     },
-    addFacility: function(facilityData) {
+    getAvailableGear: function(gear) {
+        var type = '';
+        console.log(this.state.showHarness);
+        if(gear === 'harness' || this.state.showHarness){
+            type = 'harness';
+        } else if (gear === 'shoes' || this.state.showShoes){
+            type = 'shoes';
+        } else if (gear === 'rope' || this.state.showRope){
+            type = 'rope';
+        }
+
         $.ajax({
-            url: 'index.php?module=dbUREC&action=editFacilityRest',
-            type: 'POST',
-            processData: false,
-            data: JSON.stringify(facilityData),
+            url: 'index.php?module=dbUREC&action=rentalServiceRest&student='+banner_id+'&type='+type,
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {   
+                this.setState({availGear: data});
+                console.log(data);
+        }.bind(this),
+            error: function(xhr, status, err) {
+                alert("Couldn't grab gear data");
+            }.bind(this)                
+        });
+    },
+    addRental: function(gear) {
+        $.ajax({
+            url: 'index.php?module=dbUREC&action=rentalServiceRest&student='+banner_id+'&gear='+gear,
+            type: 'PUT',
             success: function() {   
-                this.getFacility();	
-                this.setState({submitted: false});
+                this.getUserGear();	
+                this.getAvailableGear();
 	    }.bind(this),
             error: function(xhr, status, err) {
-                alert("Couldn't add facility data");
+                alert("Couldn't add gear data");
             }.bind(this)                
         });
     },
-    deleteFacility: function(fid) {
+    returnRental: function(eid) {
     	$.ajax({
-            url: 'index.php?module=dbUREC&action=editFacilityRest&fid='+fid,
+            url: 'index.php?module=dbUREC&action=rentalServiceRest&eid='+eid,
             type: 'DELETE',
             success: function() {  
-            	this.getFacility();	        
+            	this.getUserGear();	 
+                this.getAvailableGear();       
             }.bind(this),
             error: function(xhr, status, err) {
-                alert("Sorry, looks like something went wrong. We couldn't delete the facility.");
+                alert("Sorry, looks like something went wrong. We couldn't return the equipment.");
             }.bind(this)                
         });
     },	
-    updateFacility: function(facilityData) {
-        $.ajax({
-            url: 'index.php?module=dbUREC&action=editFacilityRest',
-            type: 'PUT',
-            processData: false,
-            data: JSON.stringify(facilityData),
-            success: function() {   
-                this.getFacility();	
-	    }.bind(this),
-            error: function(xhr, status, err) {
-                alert("Couldn't update facility data");
-            }.bind(this)                
-        });
+    setHarness: function() {
+        this.setState({showHarness: true, showShoes: false, showRope: false}, function(){
+            this.getAvailableGear('harness');
+        }.bind(this));
     },
-    // Top-level onSubmit handler for the creation form
-    handleSubmit: function(e) {
-        // Stop the browser from immediately sending the post
-        e.preventDefault();
+    setShoes: function() {
+        this.setState({showHarness: false, showShoes: true, showRope: false}, function(){
+            this.getAvailableGear('shoes');
+        }.bind(this));
 
-        // Set submitted=true on the state to disable submit button and prevent double-submission
-        var thisComponent = this; // Save a reference to 'this' for later use
-        var formElement = e.target; // Save a reference to the form DOM nodes that were submitted
-
-        this.setState({submitted: true, errorMessages: null}, function(){
-            // After disabling submit buttons, use callback to validate the data
-            if(!this.validate(formElement, thisComponent)){
-                // If the data doesn't validate, wait a second before re-enabling the submit button
-                // This makes sure the user sees the "Creating..." spinner, instead of it re-rendering
-                // so fast that they don't think it did anything
-                setTimeout(function(){
-                    thisComponent.setState({submitted: false});
-                }, 1000);
-
-                return;
-            }
-
-            // If we get here, then validation was successful
-            //formElement.submit();
-            this.addFacility({facilityName: formElement.elements.facilityName.value,
-                            facilityType: formElement.elements.facilityType.value,
-                            facilityID: formElement.elements.facilityID.value
-                        });
-          
-        });
     },
-    validate: function(form, thisComponent) {
-
-        // Assume everything is valid, change this if we detect otherwise
-        var valid = true;
-        var errors = [];
-
-        // Check the name
-        if(form.elements.facilityName.value === ''){
-            thisComponent.refs.nameBlock.setError(true);
-            errors.push('Facility Name');
-            valid = false;
-        }else {
-            thisComponent.refs.nameBlock.setError(false);
-        }
- 
-        // Check the type
-        if(form.elements.facilityType.value === ''){
-            thisComponent.refs.typeBlock.setError(true);
-            errors.push('Facility Type');
-            valid = false;
-        }else {
-            thisComponent.refs.typeBlock.setError(false);
-        }
-
-        // Check the id
-        if(form.elements.facilityID.value === ''){
-            thisComponent.refs.idBlock.setError(true);
-            errors.push('ID');
-            valid = false;
-        }else {
-            thisComponent.refs.idBlock.setError(false);
-        }
-      
-        if(errors.length != 0){
-            thisComponent.setErrorMessages(errors);
-        }
-
-        return valid;
-    },
-    setErrorMessages: function(messages) {
-        this.setState({errorMessages: messages});
+    setRope: function() {
+        this.setState({showHarness: false, showShoes: false, showRope: true}, function(){
+            this.getAvailableGear('rope');
+        }.bind(this));
     },
     render: function() {  
-		var errors;
-        if(this.state.errorMessages == null){
-            errors = '';
-        } else {
-            errors = <ErrorMessagesBlock key="errorSet" errors = {this.state.errorMessages} />
-        }
-
+        //console.log(this.state.availGear);
         return(
         	<div>
 	        	<div className="row">
 	        		<div className="col-md-6">
-	        			<h2><i className="fa fa-plus" />Add a Facility</h2>
+	        			<h2><i className="fa fa-plus" /> Rental Services</h2>
 	        		</div>
 	        	</div>
-	        	<br />
-	        	<div className="row">
-	        		<div className="col-md-7">
-	            		<FacilityTable fData = {this.state.fData} deleteFacility={this.deleteFacility} updateFacility={this.updateFacility} />
-	            	</div>
 
-	        		<div className="col-md-5">
-	        			<ReactCSSTransitionGroup transitionName="example" transitionEnterTimeout={500} transitionLeaveTime={500}>
-		        			{errors}
-		        	    </ReactCSSTransitionGroup>
+                <div className="row">
+                    <div className="col-md-6">
+                        <GearTable uData = {this.state.uData} returnRental = {this.returnRental}/>
+                    </div>
 
-	        			<form role="form" id="newClimberForm" className="form-protected form-horizontal" method="post" onSubmit={this.handleSubmit}>
-		            		<input type="hidden" name="module" value="dbUREC"/>
-							<input type="hidden" name="action" value="editFacilityRest"/>
+                    <div className="col-md-4 col-md-offset-2">
+                        <ButtonGroup setHarness = {this.setHarness}
+                                     setShoes   = {this.setShoes} 
+                                     setRope    = {this.setRope} />
+                    </div>
+                </div>
 
-		            		<InputBox ref="nameBlock" name="Facility Name" id="fname" divName="facilityName" />			
-		                	<InputBox ref="typeBlock" name="Facility Type" id="type" divName="facilityType" />                   
-		                	<InputBox ref="idBlock" name="Facility ID" id="id" divName="facilityID" />
-
-		                	<Submit submitted={this.state.submitted}/>
-	                	</form>
-	        		</div>
-	        	</div>
+                <div className="row">
+                    <div className="col-md-6 col-md-offset-7">
+                        {(this.state.availGear != null) ? <GearDrop gear = {this.state.availGear} addRental={this.addRental}/> : null} 
+                    </div>
+                </div>
         	</div>
         );
      }
   });
 
-var FacilityTable = React.createClass({
+//  
+// {this.state.showShoes   && (this.state.availGear != null) ? <GearDrop gear = {this.state.availGear} /> : null}
+// {this.state.showRope    && (this.state.availGear != null) ? <GearDrop gear = {this.state.availGear} /> : null}
+var GearTable = React.createClass({
     render: function() {
-    	if (this.props.fData != null)
+        var returnRental = this.props.returnRental;
+     	if (this.props.uData != null)
 		{
-			var deleteFacility = this.props.deleteFacility;
-			var updateFacility = this.props.updateFacility;
-			var FData = this.props.fData.map(function (facility) {
+			//var deleteFacility = this.props.deleteFacility;
+			var UData = this.props.uData.map(function (renter) {
 			return (
-				<FacilityRow key={facility.id}
-						name={facility.name}
-						facilityType={facility.f_type}
-					  	id={facility.id} 
-					  	deleteFacility={deleteFacility}
-					  	updateFacility={updateFacility} />
+				<GearRow key={renter.id}
+						name={renter.name}
+						eType={renter.e_type}
+					  	id={renter.id}
+                        renterId={renter.renterid}
+                        returnRental = {returnRental} />
 				);
 			});
 		}
 		else
 		{
-			var FData = <tr>
+			var UData = <tr>
 							<td>
 								<p className="text-muted">
-									<i className="fa fa-spinner fa-2x fa-spin"></i> Loading Facility Data...
+									<i className="fa fa-spinner fa-2x fa-spin"></i> Loading User Gear...
 								</p>
 							</td>
-							<td></td>
 							<td></td>
 							<td></td>
 							<td></td>
@@ -214,15 +165,14 @@ var FacilityTable = React.createClass({
         		<table className="table table-condensed table-striped">
 					<thead>
 						<tr>
-							<th>Facility Name</th>
-							<th>Facility Type</th>
-							<th>Facility ID</th>
-							<th></th>
+							<th>Equipment id</th>
+							<th>Equipment Name</th>
+							<th>Equipment Type</th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						{FData}
+						{UData}
 					</tbody>
 				</table>
         	</div>
@@ -230,121 +180,117 @@ var FacilityTable = React.createClass({
     }
 });
 
-var FacilityRow = React.createClass({
-	getInitialState: function() {
-		return {editMode: false};
-	},
-	handleEdit: function() {
-		this.setState({editMode: true});
-	},
-    handleDelete: function() {
-    	this.props.deleteFacility(this.props.id);
+var GearRow = React.createClass({
+    handleReturn: function() {
+    	this.props.returnRental(this.props.id);
     },
-    handleSave: function() {
-		this.setState({editMode: false});
-
-		this.props.updateFacility({facilityName: React.findDOMNode(this.refs.saveName).value,
-                            facilityType: React.findDOMNode(this.refs.saveType).value,
-                            facilityID: this.props.id});
-	},
     render: function() {
-    	var name = '';
-    	var type = '';
-    	var editToggle = '';
 
-    	if (this.state.editMode){
-    		name = <input type="text" className="form-control" defaultValue={this.props.name} ref='saveName' />
-    		type = <input type="text" className="form-control" defaultValue={this.props.facilityType} ref='saveType' />
-    		editToggle = <button className="btn btn-default btn-xs" type="submit" onClick={this.handleSave}> Save </button>;
-    	} else {
-    		name = this.props.name;
-    		type = this.props.facilityType;
-    		editToggle = <a style={{cursor:'pointer'}} onClick={this.handleEdit}> <i className="fa fa-pencil-square-o" /> </a>;
-    	}
+    	var id = '';
+        var name = '';
+    	var type = '';
+        var rentalReturn = '';
+
+        if (this.props.id != null){
+            id = this.props.id;
+            name = this.props.name;
+            type = this.props.eType;
+            rentalReturn = <button className='btn btn-xs' onClick={this.handleReturn}>Return</button>;
+        }
 
         return (
         	<tr>
+				<td>{id}</td>
 				<td>{name}</td>
-				<td>{type}</td>
-				<td>{this.props.id}</td>
-				<td>{editToggle}</td>
-				<td> <a style={{cursor:'pointer'}} onClick={this.handleDelete}> <i className="fa fa-trash-o" /> </a> </td>
+                <td>{type}</td>
+                <td>{rentalReturn}</td>
 			</tr>
         );
     }
 });
 
-
-var InputBox = React.createClass({
-    getInitialState: function() {
-        return({hasError: false});
+var ButtonGroup = React.createClass({
+    handleHarness: function() {
+        this.props.setHarness();
     },
-    setError: function(status) {
-        this.setState({hasError: status});
+    handleShoes: function() {
+        this.props.setShoes();
     },
-	render: function() {
-	    var fgClasses = classNames({
-            	'form-group': true,
-            	'has-error': this.state.hasError
-        	});
-
-    	return (
-	    <div className={fgClasses}>
-            	<label className="col-lg-3 control-label" htmlFor="">{this.props.name}</label>
-                <div className="col-lg-6"><input type="text" className="form-control" id={this.props.id} name={this.props.divName}/></div>
-            </div>        
-	);
-    }
-});
-
-
-var Submit = React.createClass({
-    render: function() {       
-        var button = null;
-
-        if(this.props.submitted){
-            button = <button type="submit" className="btn btn-primary pull-right" id="search-btn" disabled><i className="fa fa-spinner fa-spin" /> Adding...</button>;
-        }else{
-            button = <button type="submit" className="btn btn-primary pull-right" id="search-btn" onClick={this.handleClick}>Add Facility</button>;
-        } 
-        
-        return (
-            <div className="col-lg-2 col-md-offset-7">
-                {button}
-            </div>            
-        );
-    }
-});
-
-var ErrorMessagesBlock = React.createClass({
+    handleRope: function() {
+        this.props.setRope();
+    },
     render: function() {
-        if(this.props.errors === null){
-            return '';
-        }
-
-        var errors = this.props.errors.map(function(message, i){
-            return (
-                <li key={i}>{message}</li>
-            );
-        });
-
         return (
-            <div className="row">
-                <div className="col-sm-12 col-md-8 col-md-push-2">
-                    <div className="alert alert-danger" role="alert">
-                        <p><i className="fa fa-exclamation-circle fa-2x"></i> Please select values for the following field(s): </p>
-                        <ul>
-                            {errors}
-                        </ul>
-                    </div>
-                </div>
+            <div className="btn-group" data-toggle="buttons" >
+                <label className="btn btn-default" onClick={this.handleHarness} >
+                    <input type="radio" name="types" /> Harness
+                </label>      
+
+                <label className="btn btn-default" onClick={this.handleShoes} >
+                    <input type="radio" name="types" /> Shoes
+                </label>    
+
+                <label className="btn btn-default" onClick={this.handleRope} >
+                    <input type="radio" name="types" /> Rope
+                </label>  
             </div>
         );
     }
 });
 
+var GearDrop = React.createClass({
+    handleRental: function() {
+        var val = React.findDOMNode(this.refs.gear).value;
+        // val = val.slice(0, -5).trim();
+        this.props.addRental(val);
+    },
+    render: function() {
+        var gearData = this.props.gear;
+
+        // send gearname to server to choose first available
+
+        
+
+                // {Object.keys(gearData).map(function(key) {
+                //         return <option key={key} value={gearData[key].name}>{gearData[key]}</option>;
+                //     })}
+        return (
+            <div>
+                <div className="col-md-2">
+                    <button type="button" id="faculty-change" className="btn btn-default" onClick={this.handleRental} >
+                      <i className="fa fa-chevron-left"></i> Rent
+                    </button>
+                </div>
+
+                <div className="col-md-6">
+                <select className='form-control' ref='gear'>
+                   {gearData.map(function (gear) {
+                    return (
+                        <DropRow key={gear.name}
+                                name={gear.name}
+                                count={gear.count} />
+                        );
+                    })}
+                </select>
+
+                </div>
+            </div>
+        );
+    },
+});
+
+
+var DropRow = React.createClass({
+    render: function() {
+        var val = this.props.name + ": (" + this.props.count + ")";
+        return (
+            <option value={this.props.name}>{val}</option>
+        );
+    },
+});
+
 React.render(
-    <EditFacility />,
-    document.getElementById('editFacility')
+    <RentalService />,
+    document.getElementById('rentalService')
     );
 
