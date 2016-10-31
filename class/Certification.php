@@ -2,6 +2,7 @@
 
 namespace dbUREC;
 
+// Creates a certification onject..
 class Certification {
 	
 	public c_id;
