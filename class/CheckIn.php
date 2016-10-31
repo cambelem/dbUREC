@@ -2,6 +2,7 @@
 
 namespace dbUREC;
 
+// This creates a checkin object
 class CheckIn {
 	
 	public $id;
