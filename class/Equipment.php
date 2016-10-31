@@ -2,6 +2,7 @@
 
 namespace dbUREC;
 
+// Creates an employee object
 class Equipment {
 	
 	public eq_id;
