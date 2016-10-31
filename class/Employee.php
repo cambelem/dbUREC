@@ -2,6 +2,7 @@
 
 namespace dbUREC;
 
+// Creates an employee object
 class Employee {
 	
 	public first_name;
